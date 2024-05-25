@@ -430,6 +430,14 @@ run_mtproxy() {
     echo_run "systemctl enable MTProxy.service"
 }
 
+add_whossh() {
+    whossh_command="whossh"
+    echo_run "apt install net-tools -y"
+    echo "netstat -tnpa | grep 'ESTABLISHED.*ssh' | awk '{print \$7}' | cut -d '/' -f 1 | xargs ps -o user= -p | sort | uniq" > /usr/local/bin/$whossh_command
+    chmod +x /usr/local/bin/$whossh_command
+    echo "Adding $whossh_command done."
+}
+
 ACTIONS=(
     setup_dns
     server_initial_setup
@@ -449,6 +457,7 @@ ACTIONS=(
     setup_fail2ban
     setup_firewall
     install_nginx_proxy
+    add_whossh
 
     # Old Methods
     install_xui_legacy
